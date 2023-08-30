@@ -1,0 +1,25 @@
+#! /bin/sh
+output=$(date +%Y-%m-%d-%T) # generic file name
+output=$"/home/rafael/Pictures/screenshots/"$output$".png"
+
+case "$1" in
+	"select") scrot "$output" --select --line mode=edge || exit ;;
+	"window") scrot "$output" --focused --border || exit ;;
+	*) scrot "$output" || exit ;;
+esac
+
+# notify-send "Screenshot taken."
+# dwm:
+xsetroot -name "Screenshot taken."
+
+filename=$(:| dmenu -i -p "Filename (without extension):")
+
+if [ "$filename" ]; then
+        filename=$"/home/rafael/Pictures/screenshots/"$filename$".png"
+	mv $output $filename
+else
+	filename=$output
+fi
+
+# copy to clipboard
+copyq write image/png - < $filename && copyq select 0

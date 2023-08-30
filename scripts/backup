@@ -1,0 +1,21 @@
+#!/bin/sh
+
+TIMESTAMP=`date "+%Y-%m-%dT%H-%M-%S"`
+USER=user
+SOURCEDIR=/home/rafael
+TARGETDIR=/data/backup
+
+# Create new backup using rsync and output to log
+rsync -avPh --delete --link-dest=$TARGETDIR/current $SOURCEDIR/$USER/ $TARGETDIR/$USER-$TIMESTAMP > /var/log/rsync/$TIMESTAMP.log 2>&1
+
+# check exit status to see if backup failed
+if [ "$?" = 0 ]; then
+    # Remove link to current backup
+    rm -f $TARGETDIR/current
+    # Create link to the newest backup
+    ln -s $TARGETDIR/$USER-$TIMESTAMP $TARGETDIR/current
+else
+    # Rename directory if failed
+    mv $TARGETDIR/$USER-$TIMESTAMP $TARGETDIR/failed-$USER-$TIMESTAMP
+fi
+

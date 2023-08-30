@@ -1,0 +1,6 @@
+#!/bin/sh
+
+AU=$(printf "pulseaudio\nalsa" | dmenu)
+
+cp ~/.mpd/$AU/mpd.conf ~/.mpd/mpd.conf
+systemctl --user restart mpd

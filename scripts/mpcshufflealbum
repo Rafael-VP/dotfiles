@@ -1,0 +1,2 @@
+#!/bin/sh
+mpc searchplay Album "$(mpc list album | shuf -n 1)"

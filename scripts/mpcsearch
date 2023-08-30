@@ -1,0 +1,11 @@
+#!/bin/sh
+
+A=$(mpc playlist | dmenu -i -l 15)
+IFS=" - " read B C D <<< "$A"
+
+if [ -n "$A" ]
+then
+	echo test
+	mpc searchplay title "$D"
+fi
+
